@@ -129,13 +129,12 @@ function onSaveCanvas(data) {
   console.log(data);
 };
 
-function onSetCanvas(data) {
-  var that = this;
+function onSetCanvas() {
   client.get("canvas", function(err, reply) {
     // reply is null when the key is missing
-    console.log(JSON.stringify(reply));
+    console.log(JSON.parse(reply));
     console.log("cool");
-    that.broadcast.emit("set canvas", JSON.stringify(reply));
+    socket.sockets.emit("set canvas", JSON.parse(reply));
   });
 };
 

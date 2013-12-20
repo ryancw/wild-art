@@ -18,8 +18,8 @@ function init() {
         ctx = canvas.getContext("2d");
 
         // Maximise the canvas
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = 500;
+        canvas.height = 500;
 
         // Initialise keyboard controls
         keys = new Keys();
@@ -52,9 +52,6 @@ var setEventHandlers = function() {
         window.addEventListener("keydown", onKeydown, false);
         window.addEventListener("keyup", onKeyup, false);
 
-        // Window resize
-        window.addEventListener("resize", onResize, false);
-
         // Socket connection successful
         socket.on("connect", onSocketConnected);
 
@@ -70,7 +67,7 @@ var setEventHandlers = function() {
         // Player removed message received
         socket.on("remove player", onRemovePlayer);
 
-        socket.on("set canvas", setCanvas);
+        socket.on("set canvas", onSetCanvas);
 };
 
 // Keyboard key down
@@ -87,12 +84,6 @@ function onKeyup(e) {
         };
 };
 
-// Browser window resize
-function onResize(e) {
-        // Maximise the canvas
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-};
 
 // Socket connected
 function onSocketConnected() {
@@ -201,10 +192,13 @@ function getCanvasData() {
 	socket.emit("get canvas");
 }
 
-function setCanvas(data) {
+function onSetCanvas(data) {
+	console.log("setting canvas...1")
 	console.log(data);
-	console.log("setting canvas...")
-	ctx.drawImage(data.canvas, data.width, data.height);
+	var image = new Image();
+	image.src = data.canvas;
+	ctx.clearRect(0, 0, data.width, data.height);
+	ctx.drawImage(image, 0, 0, data.width, data.height);
 };
 
 
