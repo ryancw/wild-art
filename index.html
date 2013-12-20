@@ -1,34 +1,39 @@
 <html>
   <head>
-    <style>
-      body {
-        font-family: "Helvetica Neue", helvetica, arial;
-        padding: 15px;
-      }
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+          $(function(){
+              var iosocket = io.connect();
 
-      ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
+              iosocket.on('connect', function () {
+                  $('#incomingChatMessages').append($('<li>Connected</li>'));
 
-      ul li {
-        line-height: 1.4;
-      }
-    </style>
+                  iosocket.on('message', function(message) {
+                      $('#incomingChatMessages').append($('<li></li>').text(message));
+                  });
+                  iosocket.on('disconnect', function() {
+                      $('#incomingChatMessages').append('<li>Disconnected</li>');
+                  });
+              });
 
-    <script>
-      var host = location.origin.replace(/^http/, 'ws')
-      var ws = new WebSocket(host);
-      ws.onmessage = function (event) {
-        var li = document.createElement('li');
-        li.innerHTML = JSON.parse(event.data);
-        document.querySelector('#pings').appendChild(li);
-      };
-    </script>
+              $('#outgoingChatMessage').keypress(function(event) {
+                  if(event.which == 13) {
+                      event.preventDefault();
+                      iosocket.send($('#outgoingChatMessage').val());
+                      $('#incomingChatMessages').append($('<li></li>').text($('#outgoingChatMessage').val()));
+                      $('#outgoingChatMessage').val('');
+                  }
+              });
+          });
+      </script>
   </head>
   <body>
-    <h1>Pings</h1>
-    <ul id='pings'></ul>
+    Incoming Chat: <ul id="incomingChatMessages"></ul>
+
+
+    <input type="text" id="outgoingChatMessage">
+
+    <canvas width="600" height="600"></canvas>
   </body>
 </html>

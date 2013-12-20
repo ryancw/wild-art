@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<title>make some cool stuff, yknow</title>
+		<meta charset="utf-8">
+
+		<link rel="stylesheet" href="style/reset.css">
+		<link rel="stylesheet" href="style/game.css">
+		<!-- Load the Paper.js library -->
+		<script type="text/javascript" src="js/paper-full.min.js"></script>
+		<!-- Define inlined PaperScript associate it with myCanvas -->
+		<script type="text/paperscript" canvas="gameCanvas">
+			// Create a Paper.js Path to draw a line into it:
+			var path = new Path();
+			// Give the stroke a color
+			path.strokeColor = 'black';
+			var start = new Point(100, 100);
+			// Move to start and draw a line from there
+			path.moveTo(start);
+			// Note the plus operator on Point objects.
+			// PaperScript does that for us, and much more!
+			path.lineTo(start + [ 100, -50 ]);
+		</script>
+	</head>
+
+	<body>
+		<canvas id="gameCanvas" height="1000" width="1000"></canvas>
+		<div id="tools">
+			<p>Here are the tools</p>
+			<input type="button" name="title" onclick="saveCanvas()">sup</input>
+			<input type="button" name="yup" onclick="getCanvasData()">cool</input>
+		</div>
+		<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+		<script src="js/kinetic-v4.7.4.min.js"></script>
+		<script src="js/requestAnimationFrame.js"></script>
+		<script src="js/Keys.js"></script>
+		<script src="js/Player.js"></script>
+		<script src="js/game.js"></script>
+		<script>
+			init();
+			animate();
+		</script>
+	</body>
+</html>
